@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+  <logger name="com.github.hWorblehat" level="DEBUG"/>
+  <logger name="org.apache.shiro.realm" level="DEBUG"/>
+  <logger name="org.sonatype.nexus.security" level="DEBUG"/>
+  <!--<logger name="org.apache.http" level="DEBUG"/>-->
+</included>

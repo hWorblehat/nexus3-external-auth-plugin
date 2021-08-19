@@ -1,0 +1,26 @@
+services:
+
+  nexus:
+    image: sonatype/nexus3:3.33.1
+    ports:
+      - "8081:8081"
+    volumes:
+      - "./target/bundles:/opt/sonatype/nexus/deploy"
+      - "./deploy-conf/logback-overrides.xml:/nexus-data/etc/logback/logback-overrides.xml"
+  
+  oauth_state:
+    image: redis:5-alpine
+  
+  oauth_proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy
+    ports:
+      - "8082:4180"
+    volumes:
+      - "./deploy-conf/oauth2-proxy.conf:/oauth2-proxy.conf"
+    command:
+      - --config=/oauth2-proxy.conf
+      - --http-address=:4180
+      - --session-store-type=redis
+      - --redis-connection-url=redis://oauth_state:6379
+      - --redirect-url=http://localhost:8082/oauth2/callback
+      - --upstream=http://nexus:8081
