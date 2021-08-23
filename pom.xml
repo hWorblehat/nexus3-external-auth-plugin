@@ -12,15 +12,45 @@
     <groupId>io.github.hWorblehat</groupId>
     <artifactId>nexus3-external-auth-plugin</artifactId>
     <version>0.1.0</version>
-
-    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>bundle</packaging>
 
     <properties>
+        <git.host>github.com</git.host>
+        <git.path>hWorblehat/nexus3-external-auth-plugin</git.path>
+        <git.url>${git.host}/${git.path}</git.url>
         <lombok.version>1.18.20</lombok.version>
+        <lombok.plugin.version>${lombok.version}.0</lombok.plugin.version>
+        <delombok.output>${project.build.directory}/delomboked-sources</delombok.output>
         <package.root>io.github.hWorblehat</package.root>
         <nexus.package.root>${package.root}.nexus3</nexus.package.root>
     </properties>
+
+    <scm>
+        <url>https://${git.url}</url>
+        <connection>scm:git:git://${git.url}.git</connection>
+        <developerConnection>scm:git:git@${git.host}:${git.path}.git</developerConnection>
+    </scm>
+
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Nexus 3 plugin bundle to enable authentication and authorization of external users using JWTs and Open ID Connect</description>
+    <url>${project.scm.url}</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>${project.scm.url}/blob/main/LICENSE</url>
+        </license>
+    </licenses>
+
+
+    <developers>
+        <developer>
+            <name>Rowan Lonsdale</name>
+            <email>hWorblehat@fastmail.co.uk</email>
+            <organization>hWorblehat</organization>
+            <organizationUrl>https://github.com/hWorblehat</organizationUrl>
+        </developer>
+    </developers>
+
 
     <dependencies>
         <dependency>
@@ -109,6 +139,43 @@
                     </instructions>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>${lombok.plugin.version}</version>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                    <outputDirectory>${delombok.output}</outputDirectory>
+                    <addOutputDirectory>false</addOutputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <sourcepath>${delombok.output}</sourcepath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

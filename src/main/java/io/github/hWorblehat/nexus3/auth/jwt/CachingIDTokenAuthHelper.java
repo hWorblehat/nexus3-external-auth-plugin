@@ -38,6 +38,7 @@ public class CachingIDTokenAuthHelper<T extends CachingIDTokenAuthHelper.UserDat
 	/**
 	 * JWT verifier that checks for valid signatures, that the token is in date,
 	 * and the the audience and issuer match the configuration of this client.
+	 * @return The JWT verifier
 	 */
 	@Getter
 	private final JWTVerifier jwtVerifier;
