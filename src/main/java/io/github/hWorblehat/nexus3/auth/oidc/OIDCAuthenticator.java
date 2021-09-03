@@ -102,6 +102,7 @@ public class OIDCAuthenticator extends AbstractIDTokenUserSource<OIDCAuthenticat
 				user = requestToken(refresh(user.refreshToken));
 			} else {
 				LOGGER.info("No refresh token available");
+				user = null;
 			}
 		}
 		return user;
@@ -110,7 +111,7 @@ public class OIDCAuthenticator extends AbstractIDTokenUserSource<OIDCAuthenticat
 	@Nullable
 	private UserData requestToken(Map<String, String> parameters) {
 		final JsonNode tokenResponse;
-		try{
+		try {
 			tokenResponse = oAuth2Client.token(parameters, requiredScopes);
 		} catch (IOException e) {
 			LOGGER.debug("Token request to OAuth issuer failed.", e);

@@ -11,7 +11,7 @@
 
     <groupId>io.github.hWorblehat</groupId>
     <artifactId>nexus3-external-auth-plugin</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>bundle</packaging>
 
     <properties>
@@ -22,7 +22,7 @@
         <lombok.plugin.version>${lombok.version}.0</lombok.plugin.version>
         <delombok.output>${project.build.directory}/delomboked-sources</delombok.output>
         <package.root>io.github.hWorblehat</package.root>
-        <nexus.package.root>${package.root}.nexus3</nexus.package.root>
+        <nexus.package.root>${package.root}.nexus3.auth</nexus.package.root>
     </properties>
 
     <scm>

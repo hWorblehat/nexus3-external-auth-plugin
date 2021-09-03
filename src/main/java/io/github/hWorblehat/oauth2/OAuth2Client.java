@@ -11,14 +11,15 @@ import org.apache.commons.io.function.IOSupplier;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
-import org.apache.http.impl.client.AbstractResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.*;
@@ -30,7 +31,6 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class OAuth2Client implements Closeable {
 	private static final int TOKEN_REQUEST_PARAMS_ESTIMATE = 10;
-	private static final HeaderElement[] NO_ELEMENTS = new HeaderElement[0];
 
 	private final HttpClient httpClient;
 	private final ObjectMapper objectMapper;
@@ -42,15 +42,6 @@ public class OAuth2Client implements Closeable {
 	private final Closeable toClose;
 
 	ConcurrentMap<Map<String, String>, Future<JsonNode>> tokenRequestMonitorCache = new ConcurrentHashMap<>();
-
-	private final ResponseHandler<JsonNode> tokenResponseHandler = new AbstractResponseHandler<JsonNode>() {
-		@Override
-		public JsonNode handleEntity(HttpEntity httpEntity) throws IOException {
-			try(InputStream body = httpEntity.getContent()) {
-				return objectMapper.readTree(body);
-			}
-		}
-	};
 
 	public JsonNode token(Map<String, String> parameters, Set<String> requiredScopes) throws IOException {
 		parameters.put("client_id", clientId);
