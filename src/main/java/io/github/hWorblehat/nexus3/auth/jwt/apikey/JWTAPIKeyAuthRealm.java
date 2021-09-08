@@ -63,9 +63,9 @@ public class JWTAPIKeyAuthRealm extends AuthenticatingRealm {
 
 	private DecodedJWT getJwt(AuthenticationToken token) {
 		if(token instanceof UsernamePasswordToken) {
-			LOGGER.debug("Checking if password is valid JWT.");
+			LOGGER.debug("Checking if password is valid JWT");
 			try {
-				return verifier.verify(token.getCredentials().toString());
+				return verifier.verify(new String(((UsernamePasswordToken)token).getPassword()));
 			} catch (JWTVerificationException e) {
 				LOGGER.debug("JWT verification failed.", e);
 				return null;
