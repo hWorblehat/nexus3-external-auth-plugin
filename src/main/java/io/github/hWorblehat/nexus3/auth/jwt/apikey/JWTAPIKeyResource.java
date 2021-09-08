@@ -44,9 +44,19 @@ public class JWTAPIKeyResource implements Resource {
 	@PUT
 	@Path("{key}")
 	@RequiresUser
-	public String createKey(@PathParam("key") String key) {
+	public JWTAPIKeyCreateResponse createKey(@PathParam("key") String key) {
 		checkConfigured();
-		return apiKeys.create(getCurrentUser(), key, config);
+		return new JWTAPIKeyCreateResponse(
+				JWTAPIKeyAuthRealm.DUMMY_USERNAME,
+				apiKeys.create(getCurrentUser(), key, config)
+		);
+	}
+
+	@GET
+	@Path("create/{key}")
+	@RequiresUser
+	public JWTAPIKeyCreateResponse createKeyGet(@PathParam("key") String key) {
+		return createKey(key);
 	}
 
 	@DELETE
@@ -58,6 +68,13 @@ public class JWTAPIKeyResource implements Resource {
 		if(!apiKeys.delete(getCurrentUser(), key)) {
 			throw new WebApplicationMessageException(NOT_FOUND, "No JWT API key '" + key + "' found.");
 		}
+	}
+
+	@GET
+	@Path("delete/{key}")
+	@RequiresUser
+	public void deleteKeyGet(@PathParam("key") String key) {
+		deleteKey(key);
 	}
 
 	private PrincipalCollection getCurrentUser() {
