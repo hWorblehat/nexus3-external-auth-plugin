@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.sonatype.nexus.plugins</groupId>
         <artifactId>nexus-plugins</artifactId>
-        <version>3.33.0-01</version>
+        <version>3.39.0-01</version>
     </parent>
 
     <groupId>io.github.hWorblehat</groupId>
     <artifactId>nexus3-external-auth-plugin</artifactId>
-    <version>0.1.3</version>
+    <version>3.39-0.1.3</version>
     <packaging>bundle</packaging>
 
     <properties>
